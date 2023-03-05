@@ -1,56 +1,57 @@
 package com.example.haushaltsverwaltungssystem.controller;
 
+import com.example.haushaltsverwaltungssystem.domain.Product;
 import com.example.haushaltsverwaltungssystem.domain.ShoppingList;
-import com.example.haushaltsverwaltungssystem.exception.NotFoundException;
-import com.example.haushaltsverwaltungssystem.exception.ResourceNotFoundException;
-import com.example.haushaltsverwaltungssystem.service.ShoppingListServiceImpl;
+import com.example.haushaltsverwaltungssystem.service.ShoppingListService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.net.URI;
+import java.util.List;
 
-@RestController
+@RequestMapping("/shoppinglists")
+@RestController()
+@RequiredArgsConstructor
 public class ShoppingListController {
 
-    ShoppingListServiceImpl shoppingListService;
+    private final ShoppingListService shoppingListService;
 
-    public ShoppingListController(ShoppingListServiceImpl shoppingListService) {
-        this.shoppingListService = shoppingListService;
-    }
-
-    @GetMapping("/shoppinglists/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus( HttpStatus.OK )
     public ResponseEntity<ShoppingList> getSingleShoppingList(@PathVariable Long id) {
-
-        return ResponseEntity.ok(
-                shoppingListService.getOneShoppingList(id).orElseThrow(() -> {
-                    throw new NotFoundException("ShoppingList not Found !");
-                })
-        );
+        return ResponseEntity.ok(shoppingListService.getOneShoppingList(id));
     }
 
-    @GetMapping("/shoppinglists")
+    @GetMapping
     @ResponseStatus( HttpStatus.OK )
-    public ResponseEntity<Set<ShoppingList>> getAllShoppingListsForSocialGroupById() {
+    public ResponseEntity<List<ShoppingList>> getAllShoppingListsForSocialGroupById() {
         //TODO: SocialGroup get implements later; GetAllShoppingList by social group id
-        return ResponseEntity.of(shoppingListService.getAllShoppingLists());
+        return ResponseEntity.ok(shoppingListService.getAllShoppingLists());
     }
 
-    @PostMapping("/shoppinglists")
+    @PostMapping
     @ResponseStatus( HttpStatus.CREATED )
     public ResponseEntity<ShoppingList> createShoppingListBySocialGroup(@RequestBody ShoppingList shoppingList) {
         //TODO: SocialGroup get implements later; GetAllShoppingList by social group id
-        if (shoppingList == null) throw new ResourceNotFoundException("shoppingList is not initialized");
+        ShoppingList shoppingListCreated = shoppingListService.saveShoppingList(shoppingList);
+        return ResponseEntity.created(URI.create("#"))
+                .body(shoppingListCreated);
+        //TODO: return created URI
+    }
 
-        return ResponseEntity.ok(
-                shoppingListService.saveShoppingList(shoppingList).orElseThrow(() -> {
-                    throw new ResourceNotFoundException("shoppingList is not initialized");
-                }));
+    @PostMapping("{id}/products")
+    @ResponseStatus( HttpStatus.CREATED )
+    public ResponseEntity<ShoppingList> addProductInShoppingList(@RequestBody Product product, @PathVariable Long id) {
+        //TODO: SocialGroup get implements later; GetAllShoppingList by social group id
+       return ResponseEntity.created(URI.create("#"))
+               .body(shoppingListService.addProduct(product,id));
     }
 }
