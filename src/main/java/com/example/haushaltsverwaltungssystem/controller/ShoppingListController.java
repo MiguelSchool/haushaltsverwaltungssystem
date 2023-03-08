@@ -45,14 +45,12 @@ public class ShoppingListController {
                 .body(shoppingListService.addProduct(product, id));
     }
 
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/product/{id}")
     public void removeProductInShoppingList(@PathVariable Long id,@RequestBody Product product) {
         shoppingListService.deleteProduct(id,product);
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
     public void removeShoppingList(@PathVariable Long id) {
         shoppingListService.deleteShoppingList(id);
     }
