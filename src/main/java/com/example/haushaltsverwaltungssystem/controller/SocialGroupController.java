@@ -1,6 +1,7 @@
 package com.example.haushaltsverwaltungssystem.controller;
 
 
+import com.example.haushaltsverwaltungssystem.domain.ShoppingList;
 import com.example.haushaltsverwaltungssystem.domain.SocialGroup;
 import com.example.haushaltsverwaltungssystem.service.SocialGroupService;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +51,14 @@ public class SocialGroupController {
     public void deleteSocialGroup(@PathVariable Long id) {
         socialGroupService.deleteSocialGroup(id);
     }
+
+    @PostMapping("{id}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<SocialGroup> createShoppingListBySocialGroup(@RequestBody ShoppingList shoppingList, @PathVariable Long id) {
+        SocialGroup shoppingListCreated = socialGroupService.saveShoppingList(id,shoppingList);
+        return ResponseEntity.created(URI.create("#"))
+                .body(shoppingListCreated);
+        //TODO: return created URI
+    }
+
 }

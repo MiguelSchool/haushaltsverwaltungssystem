@@ -1,5 +1,6 @@
 package com.example.haushaltsverwaltungssystem.service;
 
+import com.example.haushaltsverwaltungssystem.domain.ShoppingList;
 import com.example.haushaltsverwaltungssystem.domain.SocialGroup;
 import com.example.haushaltsverwaltungssystem.exception.NotFoundException;
 import com.example.haushaltsverwaltungssystem.repository.SocialGroupRepository;
@@ -18,6 +19,11 @@ public class SocialGroupService {
         return socialGroupRepository.save(socialGroup);
     }
 
+    public SocialGroup saveShoppingList(Long id, ShoppingList shoppingList) {
+        SocialGroup selectedSocialGroup = socialGroupRepository.findById(id).orElseThrow(() -> new NotFoundException("Object not found"));
+        selectedSocialGroup.getShoppingLists().add(shoppingList);
+        return socialGroupRepository.save(selectedSocialGroup);
+    }
     public List<SocialGroup> getAllSocialGroups() {
         return socialGroupRepository.findAll();
     }

@@ -38,16 +38,6 @@ public class ShoppingListController {
         return ResponseEntity.ok(shoppingListService.getAllShoppingLists());
     }
 
-    @PostMapping("id")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<ShoppingList> createShoppingListBySocialGroup(@RequestBody ShoppingList shoppingList,@PathVariable Long id) {
-        //TODO: SocialGroup get implements later; GetAllShoppingList by social group id
-        ShoppingList shoppingListCreated = shoppingListService.saveShoppingList(shoppingList);
-        return ResponseEntity.created(URI.create("#"))
-                .body(shoppingListCreated);
-        //TODO: return created URI
-    }
-
     @PostMapping("{id}/products")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ShoppingList> addProductInShoppingList(@RequestBody Product product, @PathVariable Long id) {
