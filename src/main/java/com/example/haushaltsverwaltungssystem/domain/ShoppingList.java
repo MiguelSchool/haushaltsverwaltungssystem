@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,5 +30,9 @@ public class ShoppingList extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name="product_id")
     )
     private Set<Product>products = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "social_group_object_id", nullable = false)
+    private SocialGroup socialGroup;
 
 }
