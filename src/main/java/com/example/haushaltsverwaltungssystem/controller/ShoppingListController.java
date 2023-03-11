@@ -2,6 +2,8 @@ package com.example.haushaltsverwaltungssystem.controller;
 
 import com.example.haushaltsverwaltungssystem.domain.Product;
 import com.example.haushaltsverwaltungssystem.domain.ShoppingList;
+import com.example.haushaltsverwaltungssystem.domain.SocialGroup;
+import com.example.haushaltsverwaltungssystem.exception.NotFoundException;
 import com.example.haushaltsverwaltungssystem.service.ShoppingListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RequestMapping("/shoppinglists")
@@ -27,27 +29,28 @@ public class ShoppingListController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ShoppingList> getSingleShoppingList(@PathVariable Long id) {
-        return ResponseEntity.ok(shoppingListService.getOneShoppingList(id));
+    public ResponseEntity<ShoppingList> getSingleShoppingList(@RequestBody SocialGroup socialGroup, @PathVariable Long id) {
+        return ResponseEntity.ok(socialGroup.getShoppingLists().stream()
+                .filter(shoppingList -> shoppingList.getId().equals(id)).findFirst()
+                .orElseThrow(() -> new NotFoundException("object not found")));
     }
 
-    @GetMapping
+    @GetMapping()
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<ShoppingList>> getAllShoppingListsForSocialGroupById() {
-        //TODO: SocialGroup get implements later; GetAllShoppingList by social group id
-        return ResponseEntity.ok(shoppingListService.getAllShoppingLists());
+    public ResponseEntity<List<ShoppingList>> getAllShoppingListsForSocialGroupById(@RequestBody SocialGroup socialGroup) {
+        return ResponseEntity.ok(socialGroup.getShoppingLists().stream().toList());
     }
 
     @PostMapping("{id}/products")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ShoppingList> addProductInShoppingList(@RequestBody Product product, @PathVariable Long id) {
-        return ResponseEntity.created(URI.create("#"))
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().build().toUri())
                 .body(shoppingListService.addProduct(product, id));
     }
 
     @DeleteMapping("/product/{id}")
-    public void removeProductInShoppingList(@PathVariable Long id,@RequestBody Product product) {
-        shoppingListService.deleteProduct(id,product);
+    public void removeProductInShoppingList(@PathVariable Long id, @RequestBody Product product) {
+        shoppingListService.deleteProduct(id, product);
     }
 
     @DeleteMapping("{id}")

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RequestMapping("/socialGroup")
@@ -42,9 +42,8 @@ public class SocialGroupController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SocialGroup> createShoppingListBySocialGroup(@RequestBody SocialGroup socialGroup) {
         SocialGroup socialGroupCreated = socialGroupService.saveSocialGroup(socialGroup);
-        return ResponseEntity.created(URI.create("#"))
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().build().toUri())
                 .body(socialGroupCreated);
-        //TODO: return created URI
     }
 
     @DeleteMapping("{id}")
@@ -56,9 +55,8 @@ public class SocialGroupController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<SocialGroup> createShoppingListBySocialGroup(@RequestBody ShoppingList shoppingList, @PathVariable Long id) {
         SocialGroup shoppingListCreated = socialGroupService.saveShoppingList(id,shoppingList);
-        return ResponseEntity.created(URI.create("#"))
+        return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest().build().toUri())
                 .body(shoppingListCreated);
-        //TODO: return created URI
     }
 
 }
