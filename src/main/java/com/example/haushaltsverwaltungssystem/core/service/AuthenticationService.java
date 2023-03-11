@@ -4,6 +4,8 @@ import com.example.haushaltsverwaltungssystem.core.domain.AuthenticationRequest;
 import com.example.haushaltsverwaltungssystem.core.domain.AuthenticationResponse;
 import com.example.haushaltsverwaltungssystem.core.domain.RegisterRequest;
 import com.example.haushaltsverwaltungssystem.core.domain.Role;
+import com.example.haushaltsverwaltungssystem.core.domain.Token;
+import com.example.haushaltsverwaltungssystem.core.repository.TokenRepository;
 import com.example.haushaltsverwaltungssystem.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import com.example.haushaltsverwaltungssystem.core.domain.User;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final TokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -49,5 +52,9 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    public void logout(Token token) {
+        tokenRepository.delete(token);
     }
 }
