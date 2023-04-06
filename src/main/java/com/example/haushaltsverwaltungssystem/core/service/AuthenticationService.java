@@ -9,6 +9,7 @@ import com.example.haushaltsverwaltungssystem.core.repository.TokenRepository;
 import com.example.haushaltsverwaltungssystem.core.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import com.example.haushaltsverwaltungssystem.core.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthenticationService {
 
     private final UserRepository userRepository;
@@ -32,8 +34,11 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
                 .build();
+        log.info("user" + user);
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        log.info("jwt  ", jwtToken);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

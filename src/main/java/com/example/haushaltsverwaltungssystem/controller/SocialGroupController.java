@@ -1,6 +1,7 @@
 package com.example.haushaltsverwaltungssystem.controller;
 
 
+import com.example.haushaltsverwaltungssystem.core.domain.User;
 import com.example.haushaltsverwaltungssystem.domain.ShoppingList;
 import com.example.haushaltsverwaltungssystem.domain.SocialGroup;
 import com.example.haushaltsverwaltungssystem.service.SocialGroupService;
@@ -18,13 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/socialGroup")
 @RestController()
 @RequiredArgsConstructor
 public class SocialGroupController {
 
-    private SocialGroupService socialGroupService;
+    private final SocialGroupService socialGroupService;
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -36,6 +38,12 @@ public class SocialGroupController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<SocialGroup>> getAllShoppingListsForSocialGroupById() {
         return ResponseEntity.ok(socialGroupService.getAllSocialGroups());
+    }
+
+    @GetMapping("/users/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Set<User>> getAllUsersFromSocialGroup(@PathVariable Long id) {
+        return ResponseEntity.ok(socialGroupService.getAllUsersFromSingleSocialGroup(id));
     }
 
     @PostMapping

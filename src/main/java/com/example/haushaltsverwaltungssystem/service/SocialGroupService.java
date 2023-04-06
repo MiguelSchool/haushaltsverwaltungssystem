@@ -1,5 +1,6 @@
 package com.example.haushaltsverwaltungssystem.service;
 
+import com.example.haushaltsverwaltungssystem.core.domain.User;
 import com.example.haushaltsverwaltungssystem.domain.ShoppingList;
 import com.example.haushaltsverwaltungssystem.domain.SocialGroup;
 import com.example.haushaltsverwaltungssystem.exception.NotFoundException;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -34,5 +36,11 @@ public class SocialGroupService {
 
     public void deleteSocialGroup(Long id) {
         socialGroupRepository.deleteById(id);
+    }
+
+    public Set<User> getAllUsersFromSingleSocialGroup(Long id) {
+        SocialGroup selectedSocialGroup = socialGroupRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Object not found"));
+        return selectedSocialGroup.getUsers();
     }
 }
