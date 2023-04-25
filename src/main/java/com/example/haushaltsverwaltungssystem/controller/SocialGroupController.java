@@ -55,8 +55,8 @@ public class SocialGroupController {
     }
 
     @DeleteMapping("{id}")
-    public void deleteSocialGroup(@PathVariable Long id) {
-        socialGroupService.deleteSocialGroup(id);
+    public ResponseEntity<Boolean> deleteSocialGroup(@PathVariable Long id) {
+        return ResponseEntity.ok(socialGroupService.deleteSocialGroup(id));
     }
 
     @PostMapping("{id}")

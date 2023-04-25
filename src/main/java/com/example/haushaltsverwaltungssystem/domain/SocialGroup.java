@@ -36,7 +36,7 @@ public class SocialGroup extends BaseEntity {
     private Set<User>users;
     @ManyToOne
     @JoinColumn(name = "adress_object_id")
-    private Adress adress;
+    private Address adress;
 
     @OneToMany(mappedBy="socialGroup")
     private Set<ShoppingList> shoppingLists = new HashSet<>();

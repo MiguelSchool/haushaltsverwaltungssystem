@@ -20,7 +20,7 @@ import java.util.Set;
 @Entity
 @Setter
 @Getter
-public class Adress extends BaseEntity {
+public class Address extends BaseEntity {
     private String street;
     private String streetNumber;
     private String zCode;

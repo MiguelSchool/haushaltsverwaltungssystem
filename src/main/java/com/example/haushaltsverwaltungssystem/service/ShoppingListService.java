@@ -52,10 +52,11 @@ public class ShoppingListService {
         return saveShoppingList(selectedShoppingList);
     }
 
-    public void deleteProduct(Long id, Product ... productsToDelete) {
+    public Boolean deleteProduct(Long id, Product ... productsToDelete) {
         ShoppingList selectedShoppingList = this.getOneShoppingList(id);
         Arrays.asList(productsToDelete).forEach(selectedShoppingList.getProducts()::remove);
         this.saveShoppingList(selectedShoppingList);
+        return selectedShoppingList.getProducts().contains(productsToDelete);
     }
 
 }

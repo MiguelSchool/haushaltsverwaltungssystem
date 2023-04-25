@@ -49,8 +49,8 @@ public class ShoppingListController {
     }
 
     @DeleteMapping("/product/{id}")
-    public void removeProductInShoppingList(@PathVariable Long id, @RequestBody Product product) {
-        shoppingListService.deleteProduct(id, product);
+    public ResponseEntity<Boolean> removeProductInShoppingList(@PathVariable Long id, @RequestBody Product product) {
+        return ResponseEntity.ok(shoppingListService.deleteProduct(id, product));
     }
 
     @DeleteMapping("{id}")

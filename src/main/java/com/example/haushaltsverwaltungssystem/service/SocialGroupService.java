@@ -31,11 +31,12 @@ public class SocialGroupService {
     }
 
     public SocialGroup getSingleSocialgroup(Long id) {
-        return socialGroupRepository.findById(id).orElseThrow(() -> new NotFoundException("Object not found"));
+        return socialGroupRepository.findByIdOrElseThrow(id);
     }
 
-    public void deleteSocialGroup(Long id) {
+    public Boolean deleteSocialGroup(Long id) {
         socialGroupRepository.deleteById(id);
+        return socialGroupRepository.findById(id).isPresent();
     }
 
     public Set<User> getAllUsersFromSingleSocialGroup(Long id) {

@@ -1,33 +1,21 @@
 package com.example.haushaltsverwaltungssystem.core.domain;
 
 
-import com.example.haushaltsverwaltungssystem.domain.Adress;
+import com.example.haushaltsverwaltungssystem.domain.Address;
 import com.example.haushaltsverwaltungssystem.domain.BaseEntity;
 import com.example.haushaltsverwaltungssystem.domain.SocialGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
@@ -36,15 +24,23 @@ import java.util.List;
 @Table(name = "user_entity")
 public class User extends BaseEntity implements UserDetails {
 
-    private String firstname;
-    private  String lastname;
-    private  String email;
+    @NonNull
+    @Column(name = "firstname")
+    private String firstName;
+
+    @NonNull
+    @Column(name = "lastname")
+    private String lastName;
+
+    @NonNull
+    @Column(name = "email")
+    private String email;
     private String username;
-    private  String password;
+    private String password;
 
     @ManyToOne
     @JoinColumn(name = "adress_object_id")
-    private Adress adress;
+    private Address address;
 
     @ManyToMany
     @JsonIgnore
@@ -53,12 +49,18 @@ public class User extends BaseEntity implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "socialGroup_id")
     )
-    List<SocialGroup>socialGroups = new ArrayList<>();
+    List<SocialGroup> socialGroups = new ArrayList<>();
+
+    private File image;
 
     @Enumerated(EnumType.STRING)
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+
+    public User() {
+
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,6 +70,7 @@ public class User extends BaseEntity implements UserDetails {
     public String getProfileUsername() {
         return username;
     }
+
     @Override
     public String getUsername() {
         return email;
