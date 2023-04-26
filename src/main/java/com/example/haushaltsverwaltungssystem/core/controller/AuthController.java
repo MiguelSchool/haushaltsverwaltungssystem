@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @CrossOrigin(
-        origins = {"http://localhost:4200/**", "http://localhost:4200/"},exposedHeaders = "Authorization", allowCredentials = "true", maxAge = 3600)
+        origins = {"http://localhost:4200/**","http://localhost:4200/auth/profile/**" ,"http://localhost:4200/"},exposedHeaders = "Authorization", allowCredentials = "true", maxAge = 3600)
 @Slf4j
 public class AuthController {
 
@@ -53,9 +53,10 @@ public class AuthController {
         return ResponseEntity.ok(authenticationService.findUserById(id));
     }
 
-    @PutMapping("/update")
+    @PutMapping("/profile/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<User>updateProfile(@RequestBody User profile) {
-        return ResponseEntity.ok(authenticationService.updateUser(profile));
+    public ResponseEntity<User>updateProfile(@RequestBody User profile, @PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails) {
+log.info("profile:  ",profile);
+        return ResponseEntity.ok(authenticationService.updateUser(profile,id));
     }
 }

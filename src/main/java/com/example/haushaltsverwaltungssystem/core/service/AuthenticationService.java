@@ -81,8 +81,9 @@ public class AuthenticationService {
         return userRepository.save(profile);
     }
 
-    public User updateUser(User profile) {
-        User actual = userRepository.findUserByIdOrElseThrow(profile.getId());
+    public User updateUser(User profile, Long id) {
+        log.info(String.valueOf(profile));
+        User actual = userRepository.findUserByIdOrElseThrow(id);
         actual.setRole(profile.getRole());
         actual.setUsername(profile.getUsername());
         actual.setEmail(profile.getEmail());

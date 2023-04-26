@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Entity
 @Setter
@@ -24,15 +25,12 @@ import java.util.List;
 @Table(name = "user_entity")
 public class User extends BaseEntity implements UserDetails {
 
-    @NonNull
     @Column(name = "firstname")
     private String firstName;
 
-    @NonNull
     @Column(name = "lastname")
     private String lastName;
 
-    @NonNull
     @Column(name = "email")
     private String email;
     private String username;
@@ -55,12 +53,6 @@ public class User extends BaseEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
-
-    public User() {
-
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
